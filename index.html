@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ジェミニ・アビス：AI賢者の深淵</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Hiragino Sans', 'Yu Gothic', sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #e8e8e8;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .game-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(100,149,237,0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .title {
+            font-size: 2.5em;
+            color: #6495ed;
+            text-shadow: 0 0 20px rgba(100,149,237,0.5);
+            margin-bottom: 10px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 20px rgba(100,149,237,0.5); }
+            to { text-shadow: 0 0 30px rgba(100,149,237,0.8), 0 0 40px rgba(100,149,237,0.3); }
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            color: #b0c4de;
+            margin-bottom: 20px;
+        }
+        
+        .status-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .status-item {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(100,149,237,0.2);
+            text-align: center;
+        }
+        
+        .status-label {
+            font-size: 0.9em;
+            color: #b0c4de;
+            margin-bottom: 5px;
+        }
+        
+        .status-value {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        
+        .game-content {
+            background: rgba(255,255,255,0.08);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(100,149,237,0.3);
+            backdrop-filter: blur(10px);
+            margin-bottom: 20px;
+        }
+        
+        .elder-speech {
+            background: linear-gradient(135deg, rgba(75,0,130,0.3), rgba(138,43,226,0.2));
+            border-left: 4px solid #9370db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+            font-style: italic;
+            position: relative;
+        }
+        
+        .elder-speech::before {
+            content: "🧙‍♂️ エルデスト・グーグル：";
+            display: block;
+            font-weight: bold;
+            color: #dda0dd;
+            margin-bottom: 10px;
+            font-style: normal;
+        }
+        
+        .question-block {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 25px;
+            margin: 25px 0;
+            border: 2px solid rgba(255,215,0,0.3);
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .question-title {
+            font-size: 1.4em;
+            color: #ffd700;
+            font-weight: bold;
+        }
+        
+        .difficulty {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+        
+        .question-text {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: #e8e8e8;
+        }
+        
+        .choices {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .choice-button {
+            background: linear-gradient(135deg, rgba(100,149,237,0.2), rgba(70,130,180,0.2));
+            border: 2px solid rgba(100,149,237,0.4);
+            color: #e8e8e8;
+            padding: 15px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            font-size: 1em;
+            line-height: 1.4;
+        }
+        
+        .choice-button:hover {
+            background: linear-gradient(135deg, rgba(100,149,237,0.4), rgba(70,130,180,0.4));
+            border-color: rgba(100,149,237,0.7);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(100,149,237,0.3);
+        }
+        
+        .choice-button.selected {
+            background: linear-gradient(135deg, rgba(255,215,0,0.3), rgba(255,165,0,0.3));
+            border-color: #ffd700;
+        }
+        
+        .choice-button.correct {
+            background: linear-gradient(135deg, rgba(34,197,94,0.3), rgba(22,163,74,0.3));
+            border-color: #22c55e;
+        }
+        
+        .choice-button.incorrect {
+            background: linear-gradient(135deg, rgba(239,68,68,0.3), rgba(220,38,38,0.3));
+            border-color: #ef4444;
+        }
+        
+        .submit-button {
+            background: linear-gradient(135deg, #ffd700, #ffb347);
+            color: #1a1a2e;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255,215,0,0.4);
+        }
+        
+        .submit-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .result-panel {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 2px solid;
+            display: none;
+        }
+        
+        .result-panel.correct {
+            border-color: #22c55e;
+            background: rgba(34,197,94,0.1);
+        }
+        
+        .result-panel.incorrect {
+            border-color: #ef4444;
+            background: rgba(239,68,68,0.1);
+        }
+        
+        .orb-reward {
+            text-align: center;
+            font-size: 1.2em;
+            margin: 15px 0;
+            animation: sparkle 1s ease-in-out;
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+        
+        .explanation {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-left: 4px solid #6495ed;
+        }
+        
+        .explanation h4 {
+            color: #ffd700;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .explanation p {
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        
+        .next-button {
+            background: linear-gradient(135deg, #6495ed, #4169e1);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .next-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(100,149,237,0.4);
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ffd700, #ffb347);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 5px;
+        }
+        
+        .trial-intro {
+            background: linear-gradient(135deg, rgba(138,43,226,0.2), rgba(75,0,130,0.2));
+            border: 2px solid rgba(138,43,226,0.4);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            text-align: center;
+        }
+        
+        .trial-title {
+            font-size: 1.8em;
+            color: #dda0dd;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(221,160,221,0.5);
+        }
+        
+        .hidden {
+            display: none;
+        }
+
+        .start-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .start-button {
+            background: linear-gradient(135deg, #6495ed, #4169e1);
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            border-radius: 30px;
+            font-size: 1.3em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 30px 0;
+        }
+
+        .start-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(100,149,237,0.4);
+        }
+
+        .final-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .final-title {
+            font-size: 2.2em;
+            color: #ffd700;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(255,215,0,0.6);
+        }
+
+        .final-stats {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 2px solid rgba(255,215,0,0.3);
+        }
+
+        .restart-button {
+            background: linear-gradient(135deg, #9370db, #8a2be2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .restart-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(147,112,219,0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="header">
+            <h1 class="title">ジェミニ・アビス：AI賢者の深淵</h1>
+            <p class="subtitle">【試練の門】- 知恵の探求者よ、深淵への挑戦を始めよ</p>
+        </div>
+
+        <!-- スタート画面 -->
+        <div id="startScreen" class="game-content start-screen">
+            <div class="elder-speech">
+                ようこそ、挑戦者よ。この深淵では、表面的な知識だけでは先へは進めぬ。AIの真の姿を見抜く眼力が試されるであろう。数々の試練を乗り越え、真のAI賢者となるがよい。
+            </div>
+            <button class="start-button" onclick="startGame()">深淵への扉を開く</button>
+        </div>
+
+        <!-- ゲーム進行画面 -->
+        <div id="gameScreen" class="hidden">
+            <div class="status-panel">
+                <div class="status-item">
+                    <div class="status-label">挑戦者レベル</div>
+                    <div class="status-value" id="playerLevel">1</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">叡智ポイント</div>
+                    <div class="status-value" id="wisdomPoints">0 EP</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">獲得オーブ</div>
+                    <div class="status-value" id="orbCount">0</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">称号</div>
+                    <div class="status-value" id="playerTitle">知恵の探求者</div>
+                </div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+
+            <div class="game-content">
+                <div id="questionContainer"></div>
+            </div>
+        </div>
+
+        <!-- 最終画面 -->
+        <div id="finalScreen" class="hidden">
+            <div class="game-content final-screen">
+                <h2 class="final-title">試練完了！</h2>
+                <div class="elder-speech" id="finalMessage"></div>
+                <div class="final-stats">
+                    <h3>あなたの最終到達点</h3>
+                    <p>レベル: <span id="finalLevel"></span></p>
+                    <p>総叡智ポイント: <span id="finalPoints"></span></p>
+                    <p>正解率: <span id="finalScore"></span></p>
+                    <p>獲得称号: <span id="finalTitles"></span></p>
+                </div>
+                <button class="restart-button" onclick="restartGame()">深淵に再挑戦する</button>
+                <button class="restart-button" onclick="reviewAnswers()">解説を振り返る</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ゲーム状態
+        let gameState = {
+            currentQuestion: 0,
+            playerLevel: 1,
+            wisdomPoints: 0,
+            orbs: [],
+            titles: ['知恵の探求者'],
+            correctAnswers: 0,
+            selectedAnswers: [],
+            currentSelectedChoice: null
+        };
+
+        // 問題データ
+        const questions = [
+            {
+                trial: "第一の試練：見えざるAIの特性",
+                title: "問題１",
+                difficulty: "★★★☆☆",
+                description: "深淵の入り口に立つ、古代のガーディアンが問いかける。",
+                question: "多くの生成AIがクラウド上でその力を発揮する中、『Apple intelligence』は異なるアプローチを強調しておる。この『プライバシー重視のオンデバイス処理』が、ユーザー体験とAIの進化の方向性において、どのようなトレードオフを生じさせると考察できるか？最も本質的な組み合わせを選べ。",
+                choices: [
+                    "【利点】高速な処理速度と多様な機能 / 【欠点】インターネット接続が必須",
+                    "【利点】高度なパーソナライズとデータ保護 / 【欠点】利用できるモデルの規模や最新性への制約",
+                    "【利点】あらゆるデバイスでの利用可能性 / 【欠点】開発コストの増大",
+                    "【利点】オープンソースコミュニティによる急速な発展 / 【欠点】品質管理の難しさ"
+                ],
+                correct: 1,
+                correctMessage: "ほう、ガーディアンも頷いておる。物事の本質を見抜く力、確かに持っておるようじゃ。",
+                incorrectMessage: "ガーディアンは厳しい目を向けておる…オンデバイス処理の光と影、その両面を深く見つめよ。",
+                explanation: {
+                    correct: "オンデバイス処理は、個人データを外部に送信しないため、プライバシー保護に優れ、ユーザーのローカルデータに基づいた高度なパーソナライズが可能です。しかし、処理能力がデバイスの性能に依存するため、クラウド上で稼働する巨大な最新AIモデルを利用することには制約が生じやすく、機能や知識のアップデートにも限界が出ることがあります。",
+                    choices: [
+                        "オンデバイス処理は必ずしも高速とは限らず、オフラインでも動作する点が特徴です。",
+                        "",
+                        "デバイス依存であるため「あらゆるデバイス」とは言えず、開発コストは別の問題です。",
+                        "Apple intelligenceはオープンソースではありません。"
+                    ],
+                    supplement: "AIのアーキテクチャ（クラウドベースかオンデバイスか）は、そのAIの特性、得意なこと、そして限界を大きく左右します。ユーザーとしては、自分が何を重視するか（プライバシーか、常に最新最高の機能かなど）によって、適切なAIを選択する必要があります。"
+                },
+                reward: {
+                    points: 20,
+                    orb: "洞察のオーブのかけら"
+                }
+            },
+            {
+                trial: "第一の試練：見えざるAIの特性",
+                title: "問題２",
+                difficulty: "★★★☆☆",
+                description: "次に進むと、幻影が囁きかける。",
+                question: "Geminiは『Googleの強みである検索機能との連携』が特徴として挙げられている。この連携は、単に情報を速く見つける以上の価値をGeminiに与えているはずだ。次のうち、この連携がもたらす最も高度な恩恵であり、他の検索エンジンを持たないAIとの差別化要因となりうるものはどれか？",
+                choices: [
+                    "ユーザーの検索履歴に基づいた完璧なパーソナライズ。",
+                    "ウェブ上のあらゆる情報をリアルタイムで参照し、回答の鮮度と信頼性を向上させる能力。",
+                    "Google検索広告とのシームレスな統合による収益化。",
+                    "Google翻訳のエンジンを活用した、100以上の言語への即時対応。"
+                ],
+                correct: 1,
+                correctMessage: "幻影も消え去ったようじゃな。情報の海から真実を掬い上げる力、見事なり。",
+                incorrectMessage: "幻影はまだおぬしを惑わそうとしておる。検索との連携が、AIの『質』にどう貢献するかを考えるのじゃ。",
+                explanation: {
+                    correct: "大規模言語モデルは訓練データに基づいて回答を生成しますが、そのデータは訓練時点のものであるため、最新情報や非常にニッチな情報には弱いことがあります。Google検索との連携により、Geminiは常に最新のウェブ情報を参照できるため、回答の鮮度や事実に基づいた信頼性（ファクチュアリティ）を大幅に向上させることができます。これが、単なる内部知識に頼るAIとの大きな違いです。",
+                    choices: [
+                        "パーソナライズは重要ですが、「完璧な」という表現は過度であり、検索連携の本質的な強みは最新情報アクセスです。",
+                        "",
+                        "収益化はビジネスモデルであり、AIの能力としての恩恵ではありません。",
+                        "翻訳機能も重要ですが、検索連携による「知識のアップデート」がより根源的な強みです。"
+                    ],
+                    supplement: "AIが生成する情報の「正しさ」は非常に重要な課題です。検索エンジンとの連携は、AIが「知ったかぶり」をせず、根拠のある情報を提供するための有力な手段の一つです。しかし、検索結果自体にも誤情報が含まれる可能性はあるため、最終的な判断は人間が行う必要があります。"
+                },
+                reward: {
+                    points: 20,
+                    orb: "連携のオーブのかけら"
+                }
+            },
+            {
+                trial: "第二の試練：プロンプトの深層心理",
+                title: "問題３",
+                difficulty: "★★★★☆",
+                description: "迷宮の奥、鏡の間にたどり着く。鏡には、不完全なプロンプトが映し出されている。",
+                question: "あるユーザーが、『環境問題について、小学生向けの劇の台本を書いて。主役は動物で、3幕構成、最後は希望が持てる感じで。』とAIに指示したとする。効果的なプロンプトの4要素に照らし、このプロンプトで最も改善の余地があり、AIの出力品質に大きな影響を与えうる『不足している要素』は何か？",
+                choices: [
+                    "指示（タスク）：劇の台本を書くというタスクは明確である。",
+                    "背景情報：小学生向け、動物主役、3幕構成、希望の持てる結末という背景は十分である。",
+                    "出力形式：具体的なセリフの長さやト書きのスタイルなどの指定が不足している。",
+                    "役割（ペルソナ）：AIにどのような立場で（例：経験豊富な児童文学作家、教育者など）台本を作成してほしいかの指定がない。"
+                ],
+                correct: 3,
+                correctMessage: "鏡も満足げに輝いておる。言葉の奥に潜む可能性を引き出す才能があるようじゃ。",
+                incorrectMessage: "鏡はまだ曇っておる。AIに最高の仕事をさせるには、どのような『役』を演じさせるべきか…。",
+                explanation: {
+                    correct: "このプロンプトはタスク、背景情報、ある程度の出力の方向性（劇の台本）は示されています。しかし、「誰が」書くのかという役割（ペルソナ）の指定がありません。「経験豊富な児童文学作家として」「環境教育の専門家として」といった役割を与えることで、AIはよりその役に適した文体、語彙、内容の深み、表現方法を選択し、出力の質が格段に向上する可能性があります。",
+                    choices: [
+                        "タスクは明確に指定されています。",
+                        "基本的な背景情報は与えられています。",
+                        "出力形式も改善の余地はありますが、ペルソナの欠如はより根本的な品質に関わります。良いペルソナ設定があれば、適切な出力形式をAIが推測してくれることもあります。",
+                        ""
+                    ],
+                    supplement: "AIにペルソナを与えることは、単に文体を変えるだけでなく、そのペルソナが持つであろう知識や価値観、思考のフレームワークを模倣させ、より専門的で質の高い出力を得るための強力なテクニックです。"
+                },
+                reward: {
+                    points: 25,
+                    orb: "指令のオーブのかけら",
+                    levelUp: true,
+                    title: "プロンプト・アルケミスト"
+                }
+            },
+            {
+                trial: "第二の試練：プロンプトの深層心理",
+                title: "問題４",
+                difficulty: "★★★★☆",
+                description: "壁には、様々な「AIチャット文のヒント」が刻まれている。その一つが風化して読みにくくなっている。",
+                question: "『●●●についてアイデアを教えて』というヒントは、AIに対して創造的な思考を促すものじゃ。しかし、この種のオープンな質問で質の高い多様なアイデアを得るためには、ユーザーはAIに対してどのような『追加情報』あるいは『制約条件』を提示することが最も効果的と考えられるか？",
+                choices: [
+                    "AIが参照すべき特定の情報源やウェブサイトのリスト。",
+                    "生成されるアイデアの最低数と最大数、およびそれぞれのアイデアの文字数制限。",
+                    "アイデアが解決しようとしている具体的な課題、ターゲットとするユーザー層、利用可能なリソースや技術的制約。",
+                    "AIが過去に生成した類似のアイデアのリストと比較し、重複を避けるようにとの指示。"
+                ],
+                correct: 2,
+                correctMessage: "風化した文字の真意を読み解いたか。漠然とした問いから具体的な価値を生み出す秘訣じゃな。",
+                incorrectMessage: "うーむ、それではAIも途方に暮れてしまうやもしれぬ。創造性には『適切な枠組み』が必要なのじゃ。",
+                explanation: {
+                    correct: "単に「アイデアを教えて」と求めるだけでは、AIは広範すぎるか、あるいは的外れな提案をする可能性があります。質の高い、実用的なアイデアを得るためには、「何のためのアイデアか（課題）」「誰のためのアイデアか（ターゲット）」「どのような条件下でのアイデアか（リソース・制約）」といった具体的なコンテキスト（背景情報）を提供することが極めて重要です。これにより、AIは思考の範囲を絞り込み、より的確で創造的な提案を行うことができます。",
+                    choices: [
+                        "情報源の指定も有効な場合はありますが、アイデア発想の自由度を狭める可能性もあります。",
+                        "数や文字数制限は出力形式の調整であり、アイデアの質そのものを高めるものではありません。",
+                        "",
+                        "重複回避は重要ですが、まず質の高いアイデアを引き出すための土台となる情報が優先されます。"
+                    ],
+                    supplement: "AIによるアイデア生成は、ブレインストーミングの良きパートナーとなり得ます。しかし、AIに「良い壁打ち相手」になってもらうためには、人間側が明確な目的意識と、思考の「とっかかり」となる質の高い情報を提供する必要があります。制約は創造性の敵ではなく、むしろ創造性を刺激する触媒となることもあります。"
+                },
+                reward: {
+                    points: 25,
+                    orb: "創造のオーブのかけら"
+                }
+            },
+            {
+                trial: "第三の試練：マルチモーダルの真髄",
+                title: "問題５",
+                difficulty: "★★★★☆",
+                description: "目の前に、弘前城の写真と「この写真は、どこのお城ですか？」という質問、そしてAIの回答が立体映像として浮かび上がっている。",
+                question: "このAIによる画像認識と回答生成のプロセスにおいて、AIが人間と同様の『理解』に近づくために、内部的にどのような情報処理や推論を行っていると推測するのが最も妥当か？",
+                choices: [
+                    "画像内のピクセルパターンを大量の城の画像データベースと照合し、最も一致率の高い城の名前を単純に出力している。",
+                    "画像から特徴点（形状、色、構造など）を抽出し、それらを知識ベース内の「城」という概念や関連情報（場所、歴史など）と結びつけ、質問の意図を理解した上で適切な説明文を生成している。",
+                    "画像に付随するGPS情報や撮影日時などのメタデータを読み取り、その情報に基づいて城を特定し、説明を検索している。",
+                    "ユーザーの過去の質問履歴や位置情報から、ユーザーが興味を持ちそうなお城の情報を推測し、提示している。"
+                ],
+                correct: 1,
+                correctMessage: "見事。AIの『眼』の奥にある思考の一端を捉えたようじゃな。",
+                incorrectMessage: "AIは単なるパターンマッチング機械ではない。情報と情報を結びつけ、意味を紡ぎ出す力を持ち始めておるのじゃ。",
+                explanation: {
+                    correct: "高度なマルチモーダルAIは、単に画像をデータベースと照合するだけではありません。画像から視覚的な特徴を抽出し、それを抽象的な概念や知識と関連付けます。そして、ユーザーの質問（「どこのお城ですか？」）という言語的な意図を理解し、関連情報を構造化して人間が理解しやすい説明文を生成します。このプロセスには、特徴抽出、概念マッピング、知識検索、自然言語生成といった複数の高度な処理が含まれます。",
+                    choices: [
+                        "これは初期の画像認識に近い単純な処理です。",
+                        "",
+                        "メタデータも手がかりにはなりますが、画像自体の内容理解が本質です。",
+                        "パーソナライズも一部行われるかもしれませんが、まず対象物を正確に認識することが先決です。"
+                    ],
+                    supplement: "マルチモーダルAIの「理解」は、人間のそれとはまだ異なりますが、複数の異なる種類の情報を統合し、それらの間の関係性を学習することで、より人間に近い柔軟な情報処理を目指しています。「この写真に写っている人物は何をしていますか？その行動からどんな感情が読み取れますか？」といった、より複雑な問いにも答えられるようになりつつあります。"
+                },
+                reward: {
+                    points: 30,
+                    orb: "統合認識のオーブのかけら",
+                    levelUp: true
+                }
+            },
+            {
+                trial: "第三の試練：マルチモーダルの真髄",
+                title: "問題６",
+                difficulty: "★★★★★",
+                description: "猫と犬の友情写真作成依頼と、それに応じて生成された画像が目の前に現れる。",
+                question: "AIが『野原で2匹の猫と秋田犬が仲良くしている写真を作ってください。』というテキスト指示から画像を生成したとする。この生成プロセスにおいて、AIが直面する可能性のある最も困難な課題であり、かつ人間の介入やより詳細な指示が効果を発揮するポイントは何か？",
+                choices: [
+                    "「野原」「猫」「秋田犬」といった基本的なオブジェクトを描画する技術的な困難さ。",
+                    "指定されたオブジェクトを写真のようにリアルな質感で描画すること。",
+                    "オブジェクト間の物理的な矛盾（例：犬が猫より小さい）を避けること。",
+                    "「仲良くしている」という抽象的かつ文脈依存的な概念を、視覚的に説得力のある構図や行動で表現すること。"
+                ],
+                correct: 3,
+                correctMessage: "その通りじゃ！抽象的な概念を具体的な形にする…それこそが創造の核心であり、AIにとっての挑戦でもあるのじゃ。",
+                incorrectMessage: "AIは形を描くのは得意になってきたが、『心』や『関係性』を描くのはまだ難しいのじゃ。そこに人間の感性が必要となる。",
+                explanation: {
+                    correct: "現代の画像生成AIは、具体的なオブジェクト（猫、犬、野原）やリアルな質感を生成する能力は非常に高くなっています。物理的な矛盾も大幅に減っています。しかし、「仲良くしている」といった感情や関係性、雰囲気といった抽象的な概念を、人間が見て自然で心に響くような形で視覚的に表現することは依然として高度な課題です。どのようなポーズ、表情、距離感、背景が「仲良し」を最もよく伝えるのかは文脈に大きく依存し、AIがそれを自律的に最適に判断するのは困難な場合があります。ここに、「もっと寄り添って」「穏やかな表情で」といった人間の細やかな指示や感性が活きてきます。",
+                    choices: [
+                        "これらはAIが得意としつつある領域であり、最も困難な課題とは言えません。",
+                        "これらはAIが得意としつつある領域であり、最も困難な課題とは言えません。",
+                        "これらはAIが得意としつつある領域であり、最も困難な課題とは言えません。",
+                        ""
+                    ],
+                    supplement: "AIによる画像生成は魔法のように見えますが、人間の意図を正確に汲み取り、期待通りの、あるいは期待以上の創造的な結果を生み出すためには、人間側からの「質の高い指示（プロンプト）」が不可欠です。特に、感情や雰囲気といった言葉にしにくいニュアンスを伝えるには、試行錯誤や、具体的なイメージを補足する言葉を尽くすことが求められます。"
+                },
+                reward: {
+                    points: 35,
+                    orb: "概念具現のオーブのかけら",
+                    title: "マルチモーダル・マエストロ"
+                }
+            },
+            {
+                trial: "第四の試練：倫理と共存の天秤",
+                title: "問題７",
+                difficulty: "★★★★★",
+                description: "資料の随所に「Geminiは不正確な情報を表示することがあるため、生成された回答を再確認するようにしてください」という注意書きが見られる。",
+                question: "この事実は、生成AIの社会実装が進む上で、どのような倫理的課題や社会的責任の所在に関する議論を喚起すると考えられるか？最も包括的かつ重要な視点を述べよ。",
+                choices: [
+                    "AI開発者は、AIが常に100%正確な情報を生成するまで製品を公開すべきではないという技術的責任。",
+                    "ユーザーは、AIが生成した情報を盲信せず、常にファクトチェックを行う情報リテラシーを持つべきであるという自己責任。",
+                    "AIが誤情報を拡散した場合の法的責任の所在（開発者か、提供者か、利用者か）を明確にする必要性。",
+                    "AIの透明性と説明可能性を向上させ、なぜそのような情報を生成したのかを理解できるようにすると同時に、誤情報のリスクをユーザーに明示し、批判的思考を促す教育と、誤情報発生時の迅速な訂正メカニズムを整備する開発者・提供者・社会全体の多角的な責任。"
+                ],
+                correct: 3,
+                correctMessage: "まさにその通り！AIとの共存は、技術の進化だけでなく、我々自身の賢明さと責任ある姿勢にかかっておるのじゃ。",
+                incorrectMessage: "問題の根は深いのじゃ。誰か一人の責任ではなく、関わる者全てが知恵を絞り、手を取り合わねばならぬ。",
+                explanation: {
+                    correct: "生成AIによる誤情報（ハルシネーション）のリスクは、技術的に完全に取り除くことが現時点では困難です。そのため、この問題に対処するには多角的なアプローチが必要です。AIの動作原理を可能な限り透明化し、なぜその結論に至ったかの説明可能性を高める努力（開発者の責任）。ユーザーに対して誤情報のリスクを明確に伝え、鵜呑みにしないよう批判的思考を促す教育や啓発（開発者、提供者、教育機関の責任）。誤情報が発見された場合に迅速に訂正・対応できる仕組みの整備（開発者、提供者の責任）。ユーザー自身の情報リテラシー向上（ユーザーの責任）。法制度の整備（社会全体の責任）。これら全てが連携して初めて、リスクを低減しつつAIの恩恵を享受できる社会が実現します。",
+                    choices: [
+                        "技術的な完璧性は現実的ではありません。",
+                        "ユーザーの責任も重要ですが、それだけでは不十分です。",
+                        "法的責任の明確化も重要な要素の一つですが、より包括的な対応が必要です。",
+                        ""
+                    ],
+                    supplement: "AI倫理は、技術の発展とともに常に議論され、更新されていくべきテーマです。「AIに何ができるか」だけでなく、「AIに何をさせるべきか」「AIをどう使うべきか」「AIによって生じる問題にどう対処すべきか」といった問いを持ち続けることが、これからの時代を生きる私たちにとって非常に重要になります。"
+                },
+                reward: {
+                    points: 40,
+                    orb: "共存のオーブの完全体",
+                    levelUp: true
+                }
+            },
+            {
+                trial: "第四の試練：倫理と共存の天秤",
+                title: "問題８",
+                difficulty: "★★★★★",
+                description: "市民自由講座「生成AIを体験してみよう」の副題には「～AIと暮らす・働く、活用法や注意点など」とある。",
+                question: "この講座の目的と内容を踏まえたとき、AI時代における「人間の学習」のあり方はどのように変化し、どのような能力がより重要になると推測できるか。最も本質を突いたものを選べ。",
+                choices: [
+                    "AIが知識を提供してくれるため、人間は記憶や知識習得の努力から解放され、より創造的な活動に専念できるようになる。",
+                    "AIを使いこなすためのプログラミングスキルやAIの専門知識が全ての人にとって必須となり、それらを習得するための学習が中心となる。",
+                    "AIが出せない問いを立てる力、AIの生成物を批判的に評価し編集する力、AIと協調して新たな価値を創造する力、そして倫理観を持ってAI技術を社会に応用する力が重要となる。",
+                    "AIの進化速度についていくため、常に最新のAIツールの使い方を学び続ける情報収集能力と迅速な適応能力が最優先される。"
+                ],
+                correct: 2,
+                correctMessage: "おぬしは、AI時代の学びの真髄を見抜いたようじゃ。道具に使われるのではなく、道具を使いこなし、新たな地平を切り拓く力、それこそが求められるのじゃな。",
+                incorrectMessage: "AIは強力な助手となり得るが、学びの主体はあくまで人間じゃ。AIに何をさせ、その結果をどう活かすか…そこに人間の知恵が試される。",
+                explanation: {
+                    correct: "AIが情報検索やコンテンツ生成を効率化してくれる時代において、人間の役割は変化します。問いを立てる力（課題設定能力）: AIは指示されたことには答えられますが、そもそも「何を解決すべきか」「何を問うべきか」という本質的な問いは人間が立てる必要があります。批判的評価・編集能力: AIの生成物は完璧ではなく、誤りや偏りを含む可能性があります。それを鵜呑みにせず、事実確認をし、目的に合わせて編集・改善する能力が求められます。協調・創造能力: AIをパートナーとして、人間ならではの洞察や創造性を組み合わせ、新たなアイデアや価値を生み出す力が重要になります。倫理的応用力: 強力な技術であるAIを、社会や人々の幸福のために、倫理観を持って正しく使う判断力と責任感が不可欠です。",
+                    choices: [
+                        "楽観的すぎる考えです。知識の習得や記憶力も依然として重要です。",
+                        "特定のスキルに偏りすぎています。すべての人にプログラミング能力が必須というわけではありません。",
+                        "",
+                        "受動的な適応に終始しており、人間の主体性が欠けています。"
+                    ],
+                    supplement: "AI時代は「何を学ぶか」だけでなく「どのように学ぶか」「学んだことをどう活かすか」がより重要になります。知識の暗記よりも、知識を応用して問題を解決したり、新たなものを創造したりする能力、そして他者（AIを含む）と協働する能力が、これからの学習の中心となるでしょう。"
+                },
+                reward: {
+                    points: 40,
+                    orb: "未来学習のオーブ",
+                    title: "AI賢者"
+                }
+            },
+            {
+                trial: "第四の試練：倫理と共存の天秤",
+                title: "問題９",
+                difficulty: "★★★★★",
+                description: "エルデスト・グーグルが静かに問いかける。",
+                question: "多様な生成AI（ChatGPT, Copilot, Gemini, Claude, Grok, Apple intelligence）がそれぞれ異なる企業や思想背景から開発されているという事実は、社会やユーザーにとってどのような意味合いを持つと考察できるか。技術の進歩と社会への影響という両面から、最も深い洞察を選べ。",
+                choices: [
+                    "どのAIも最終的には同じような機能に収斂していくため、開発元の違いはユーザーにとってほとんど意味を持たない。",
+                    "特定の企業によるAI技術の独占を防ぎ、健全な競争を促進することで、技術革新の加速とユーザーの選択肢の拡大につながる。",
+                    "開発元の思想やビジネスモデルの違いが、AIの倫理観、プライバシーポリシー、情報の偏りなどに影響を与え、ユーザーはそれらを理解し選択する必要がある。",
+                    "複数のAIを使い分ける必要性が生じ、ユーザーはそれぞれのAIの特性を熟知し、ライセンス管理も複雑になるため、利便性が低下する。"
+                ],
+                correct: 2,
+                correctMessage: "多様性の中にこそ、真の発展と自由があることを見抜いたか。賢明なる選択じゃ。",
+                incorrectMessage: "技術の背後には、それを作った者たちの『意志』が宿るものじゃ。その違いが我々に何をもたらすか…。",
+                explanation: {
+                    correct: "AIは単なる技術ではなく、その設計や学習データには開発者の価値観や目的が反映されます。例えば、プライバシーを最重視する企業が作るAIと、広告収益を主目的とする企業が作るAIでは、データの扱い方やユーザーに提示する情報が異なる可能性があります。また、特定の文化圏や思想的背景を持つデータで学習されたAIは、その影響を受けた偏り（バイアス）を持つことがあります。したがって、ユーザーはAIの機能だけでなく、その背景にある開発元の思想やポリシーを理解し、自身の価値観や目的に合ったAIを主体的に選択するリテラシーが求められます。",
+                    choices: [
+                        "収斂は起こりません。開発者の違いは重要な意味を持ちます。",
+                        "これも重要な側面ですが、より深い影響について考察する必要があります。",
+                        "",
+                        "これは表面的な問題であり、本質的な意味を見逃しています。"
+                    ],
+                    supplement: "AIの「中立性」や「客観性」は自明ではありません。我々がどのようなAIと付き合っていくかを選ぶことは、どのような情報や価値観に触れるかを選ぶことにも繋がります。多様なAIが存在することは、ユーザーにとっては選択の自由が増える一方で、それぞれの特性を見極める眼力も必要になるということです。"
+                },
+                reward: {
+                    points: 45,
+                    orb: "多様性のオーブ"
+                }
+            },
+            {
+                trial: "第四の試練：倫理と共存の天秤",
+                title: "問題１０",
+                difficulty: "★★★★★",
+                description: "エルデスト・グーグルが最後の問いを厳かに告げる。",
+                question: "この『ジェミニ・アビス：AI賢者の深淵』の試練を通じて、挑戦者よ、おぬしは何を学び、AIと共存する未来に向けてどのような覚悟を持ったか。この講座とここまでの試練全体を総括し、最も本質的かつ未来志向な『AIとの向き合い方』を示している決意を選べ。",
+                choices: [
+                    "AIの能力は人間の知性を超えつつあるため、いずれAIに全ての判断を委ね、その指示に従うことが最も賢明な道である。",
+                    "AIはあくまで人間の生産性を向上させるためのツールであり、その技術的詳細や倫理的問題は専門家に任せ、ユーザーは便利な機能だけを享受すればよい。",
+                    "AIの進化は脅威であり、その利用は厳しく制限し、可能な限り人間自身の力で問題を解決し続けるべきである。",
+                    "AIの能力と限界を理解し、その恩恵を最大限に活用しつつも、常に批判的思考と倫理観を持ち、AIを人間社会の発展と幸福のために主体的に使いこなし、共に成長していくパートナーとして捉える。"
+                ],
+                correct: 3,
+                correctMessage: "見事じゃ、挑戦者よ！その覚悟こそ、AIと人間が輝かしい未来を築くための礎となるであろう！おぬしは真の『AI賢者』として、この深淵を制覇した！",
+                incorrectMessage: "AIとの未来は、盲信でも拒絶でもなく、賢明なる『共創』の道にあるはずじゃ…。",
+                explanation: {
+                    correct: "この資料と試練全体を通じて目指したのは、AIを単なる道具として、あるいは脅威として捉えるのではなく、その可能性とリスクを理解した上で、人間が主体的に関わり、より良い未来を築くためのパートナーとして捉える視点です。AIの力を借りて人間の能力を拡張し、新たな価値を創造すると同時に、その利用には常に倫理的な配慮と批判的な吟味が必要です。AIに依存しすぎたり、思考停止したりするのではなく、AIと共に学び、成長していく姿勢が求められます。",
+                    choices: [
+                        "AIへの盲信は危険です。人間の主体性が失われてしまいます。",
+                        "専門家任せでは不十分です。全ての人がAIについて考える必要があります。",
+                        "過度な制限は、AIの恩恵を享受する機会を失わせてしまいます。",
+                        ""
+                    ],
+                    supplement: "AI技術は日進月歩で進化しています。しかし、その技術をどう使うか、どのような社会を目指すのかを決めるのは常に人間です。学び続け、問い続け、対話し続けることが、AIと共存する未来をより良いものにするために不可欠な態度と言えるでしょう。"
+                },
+                reward: {
+                    points: 50,
+                    orb: "深淵の導き手のオーブ",
+                    finalTitle: "深淵の導き手",
+                    levelUp: true
+                }
+            }
+        ];
+
+        function startGame() {
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('gameScreen').classList.remove('hidden');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const question = questions[gameState.currentQuestion];
+            const container = document.getElementById('questionContainer');
+            
+            let trialHeader = '';
+            if (gameState.currentQuestion === 0 || questions[gameState.currentQuestion].trial !== questions[gameState.currentQuestion - 1]?.trial) {
+                trialHeader = `
+                    <div class="trial-intro">
+                        <h2 class="trial-title">${question.trial}</h2>
+                        <div class="elder-speech">
+                            ${getTrialIntroduction(question.trial)}
+                        </div>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = `
+                ${trialHeader}
+                <div class="question-block">
+                    <div class="question-header">
+                        <h3 class="question-title">${question.title}</h3>
+                        <div class="difficulty">${question.difficulty}</div>
+                    </div>
+                    <p class="question-text">${question.description}</p>
+                    <p class="question-text"><strong>"${question.question}"</strong></p>
+                    <div class="choices">
+                        ${question.choices.map((choice, index) => `
+                            <button class="choice-button" onclick="selectChoice(${index})">
+                                ${index + 1}. ${choice}
+                            </button>
+                        `).join('')}
+                    </div>
+                    <button class="submit-button" id="submitBtn" onclick="submitAnswer()" disabled>
+                        答えを確定する
+                    </button>
+                    <div class="result-panel" id="resultPanel"></div>
+                </div>
+            `;
+
+            updateProgressBar();
+        }
+
+        function getTrialIntroduction(trial) {
+            const introductions = {
+                "第一の試練：見えざるAIの特性": "最初の試練は『見えざるAIの特性』。AI技術の本質を見抜く眼力が試されるであろう。",
+                "第二の試練：プロンプトの深層心理": "次なるは『プロンプトの深層心理』。言葉の裏に隠された意図を読み解き、AIを真に導く術が問われる。",
+                "第三の試練：マルチモーダルの真髄": "『マルチモーダルの真髄』。AIがテキストを超え、多様な情報をいかに統合し、新たな知を生み出すか、その深淵を覗くがよい。",
+                "第四の試練：倫理と共存の天秤": "最後の試練は『倫理と共存の天秤』。AI技術が社会にもたらす光と影を見据え、我々が取るべき道を示すのじゃ。"
+            };
+            return introductions[trial] || "";
+        }
+
+        function selectChoice(index) {
+            // 既存の選択を解除
+            document.querySelectorAll('.choice-button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // 新しい選択を適用
+            document.querySelectorAll('.choice-button')[index].classList.add('selected');
+            gameState.currentSelectedChoice = index;
+            
+            // 送信ボタンを有効化
+            document.getElementById('submitBtn').disabled = false;
+        }
+
+        function submitAnswer() {
+            const question = questions[gameState.currentQuestion];
+            const isCorrect = gameState.currentSelectedChoice === question.correct;
+            
+            // 回答を記録
+            gameState.selectedAnswers.push({
+                questionIndex: gameState.currentQuestion,
+                selectedChoice: gameState.currentSelectedChoice,
+                correct: isCorrect
+            });
+
+            if (isCorrect) {
+                gameState.correctAnswers++;
+            }
+
+            showResult(isCorrect, question);
+            updateGameState(isCorrect, question);
+            
+            // 選択ボタンを無効化
+            document.querySelectorAll('.choice-button').forEach(btn => {
+                btn.style.pointerEvents = 'none';
+            });
+            document.getElementById('submitBtn').style.display = 'none';
+        }
+
+        function showResult(isCorrect, question) {
+            const resultPanel = document.getElementById('resultPanel');
+            const resultClass = isCorrect ? 'correct' : 'incorrect';
+            const message = isCorrect ? question.correctMessage : question.incorrectMessage;
+            
+            // 選択肢の色分け
+            document.querySelectorAll('.choice-button').forEach((btn, index) => {
+                if (index === question.correct) {
+                    btn.classList.add('correct');
+                } else if (index === gameState.currentSelectedChoice && !isCorrect) {
+                    btn.classList.add('incorrect');
+                }
+            });
+
+            let rewardHTML = '';
+            if (isCorrect && question.reward) {
+                rewardHTML = `
+                    <div class="orb-reward">
+                        🔮キラリ！🔮 「${question.reward.orb}」を手に入れた！
+                        <br>叡智ポイント +${question.reward.points} EP
+                    </div>
+                `;
+            }
+
+            const explanationHTML = `
+                <div class="explanation">
+                    <h4>解説</h4>
+                    <p><strong>正解: ${question.correct + 1}. ${question.choices[question.correct]}</strong></p>
+                    <p>${question.explanation.correct}</p>
+                    ${question.explanation.choices.map((exp, index) => 
+                        exp && index !== question.correct ? `<p><strong>選択肢${index + 1}：</strong>${exp}</p>` : ''
+                    ).join('')}
+                    <h4>補足学習ポイント</h4>
+                    <p>${question.explanation.supplement}</p>
+                </div>
+            `;
+
+            resultPanel.innerHTML = `
+                <div class="elder-speech">
+                    ${message}
+                </div>
+                ${rewardHTML}
+                ${explanationHTML}
+                <button class="next-button" onclick="nextQuestion()">
+                    ${gameState.currentQuestion < questions.length - 1 ? '次の試練へ進む' : '深淵を完了する'}
+                </button>
+            `;
+            
+            resultPanel.className = `result-panel ${resultClass}`;
+            resultPanel.style.display = 'block';
+        }
+
+        function updateGameState(isCorrect, question) {
+            if (isCorrect && question.reward) {
+                gameState.wisdomPoints += question.reward.points;
+                gameState.orbs.push(question.reward.orb);
+                
+                if (question.reward.levelUp) {
+                    gameState.playerLevel++;
+                }
+                
+                if (question.reward.title && !gameState.titles.includes(question.reward.title)) {
+                    gameState.titles.push(question.reward.title);
+                    document.getElementById('playerTitle').textContent = question.reward.title;
+                }
+                
+                if (question.reward.finalTitle && !gameState.titles.includes(question.reward.finalTitle)) {
+                    gameState.titles.push(question.reward.finalTitle);
+                    document.getElementById('playerTitle').textContent = question.reward.finalTitle;
+                }
+            }
+            
+            updateStatusDisplay();
+        }
+
+        function updateStatusDisplay() {
+            document.getElementById('playerLevel').textContent = gameState.playerLevel;
+            document.getElementById('wisdomPoints').textContent = `${gameState.wisdomPoints} EP`;
+            document.getElementById('orbCount').textContent = gameState.orbs.length;
+        }
+
+        function updateProgressBar() {
+            const progress = ((gameState.currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+
+        function nextQuestion() {
+            gameState.currentQuestion++;
+            gameState.currentSelectedChoice = null;
+            
+            if (gameState.currentQuestion < questions.length) {
+                loadQuestion();
+            } else {
+                showFinalScreen();
+            }
+        }
+
+        function showFinalScreen() {
+            document.getElementById('gameScreen').classList.add('hidden');
+            document.getElementById('finalScreen').classList.remove('hidden');
+            
+            const scorePercentage = Math.round((gameState.correctAnswers / questions.length) * 100);
+            let finalMessage = '';
+            let finalRank = '';
+            
+            if (scorePercentage >= 90) {
+                finalMessage = "よくぞこの深淵なる試練を乗り越えた、深淵の導き手よ！おぬしが示した叡智と洞察力は、AIと人間が織りなす未来を明るく照らすであろう。この知識と覚悟を胸に、さらなる高みを目指すがよい！";
+                finalRank = "マスター・オブ・アビス";
+            } else if (scorePercentage >= 70) {
+                finalMessage = "なかなかの成果じゃ。AIの深淵を理解する力を身につけ始めておる。さらなる研鑽を積めば、真の賢者となることができるであろう。";
+                finalRank = "叡智の探求者";
+            } else if (scorePercentage >= 50) {
+                finalMessage = "まだまだ学ぶべきことは多いが、AIとの向き合い方の基礎は身についてきたようじゃ。諦めずに探求を続けるがよい。";
+                finalRank = "知識の芽生え";
+            } else {
+                finalMessage = "道のりは険しいが、諦めてはならぬ。AIとの共存への理解を深めるため、再び挑戦することを勧める。";
+                finalRank = "挑戦者";
+            }
+            
+            document.getElementById('finalMessage').textContent = finalMessage;
+            document.getElementById('finalLevel').textContent = finalRank;
+            document.getElementById('finalPoints').textContent = `${gameState.wisdomPoints} EP`;
+            document.getElementById('finalScore').textContent = `${scorePercentage}% (${gameState.correctAnswers}/${questions.length}問正解)`;
+            document.getElementById('finalTitles').textContent = gameState.titles.join(', ');
+        }
+
+        function restartGame() {
+            gameState = {
+                currentQuestion: 0,
+                playerLevel: 1,
+                wisdomPoints: 0,
+                orbs: [],
+                titles: ['知恵の探求者'],
+                correctAnswers: 0,
+                selectedAnswers: [],
+                currentSelectedChoice: null
+            };
+            
+            document.getElementById('finalScreen').classList.add('hidden');
+            document.getElementById('startScreen').classList.remove('hidden');
+            updateStatusDisplay();
+        }
+
+        function reviewAnswers() {
+            alert('解説の振り返り機能は今後実装予定です。今回の試練での学びを活かして、AI技術についてさらに理解を深めてください！');
+        }
+
+        // ゲーム開始時の初期化
+        updateStatusDisplay();
+    </script>
+</body>
+</html>
